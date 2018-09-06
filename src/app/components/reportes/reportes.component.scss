@@ -1,0 +1,36 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    
+  }
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+  #card{
+    margin: 0px;
+    padding: 0px;
+}
+#headerContainer{
+    text-align: center;
+}
+
+.informationCapture .mat-expansion-panel-header-title, 
+.exinformationCapture .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.informationCapture .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggle-section{
+  margin: 10px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}

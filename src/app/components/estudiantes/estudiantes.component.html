@@ -1,0 +1,153 @@
+<div id="card" class="app-Estudiantes">
+  <div class="card-body">
+    <form >
+      <header>
+        <div id="headerContainer">
+          <h3>Registro atención a Estudiantes</h3>
+        </div>
+      </header>
+      <section>
+        <div class="input-group">
+            <mat-accordion class="informationCapture">
+
+              <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+                <!-- Capture student informatión  -->
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Datos Personales
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Escriba los Datos Personales
+                      <mat-icon color = "primary">account_circle</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <mat-form-field>
+                      <input matInput placeholder="Nombre" name="nombre" [(ngModel)]="studentAtentionJSON.Nombre"
+                      [formControl]="nombreFormControl" [errorStateMatcher]="errorMatcher">
+
+                      <mat-error *ngIf="nombreFormControl.hasError('required')">
+                        El Nombre es<strong> requerido </strong>
+                      </mat-error>
+
+                  </mat-form-field>
+                  <mat-form-field>
+                      <input matInput placeholder="Apellido" name="apellido" [(ngModel)]="studentAtentionJSON.Apellido"
+                      [formControl]="apellidoFormControl" [errorStateMatcher]="errorMatcher">
+
+                      <mat-error *ngIf="apellidoFormControl.hasError('required')">
+                        El Apellido es<strong> requerido </strong>
+                      </mat-error>
+                  </mat-form-field>
+                  <mat-form-field>
+                      <input matInput placeholder="Correo" name="correo" [(ngModel)]="studentAtentionJSON.Correo" type = "Email"
+                      [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+
+                      <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                        Por favor ingrese un <strong>Correo Valido</strong> 
+                      </mat-error>
+                      <mat-error *ngIf="emailFormControl.hasError('required')">
+                        Correo es <strong>requerido</strong>
+                      </mat-error>
+
+                  </mat-form-field>
+
+                  <mat-action-row>
+                      <button mat-button color="primary" (click)="nextStep()">Next</button>
+                  </mat-action-row>
+
+                </mat-expansion-panel>
+
+                <mat-divider></mat-divider>
+                <!-- Capture Service Information  -->
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
+
+                  <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Servicios
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        Detalle el Servicio Brindado
+                        <mat-icon color = "primary">get_app</mat-icon>
+                      </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <mat-form-field>
+                      <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly
+                      name="fecha" [(ngModel)]="fecha"
+                      [formControl]="dateFormControl" [errorStateMatcher]="errorMatcher">
+
+                      <mat-error *ngIf="dateFormControl.hasError('required')">
+                        La Fecha es<strong> requerida </strong>
+                      </mat-error>
+                  </mat-form-field>
+                  <mat-datepicker touchUi="true" #picker></mat-datepicker>
+
+                  <mat-form-field>
+                    <input type="text" placeholder="Servicio"
+                      matInput [formControl]="serviceControl" [matAutocomplete] = "service"
+                      name="servicio" [(ngModel)]="studentAtentionJSON.Servicio" [errorStateMatcher]="errorMatcher">
+                    <mat-autocomplete #service= "matAutocomplete">
+                      <mat-option *ngFor="let service of filteredService | async" [value] = "service">
+                          {{ service }}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="serviceControl.hasError('required')">
+                      El Servicio es<strong> requerido </strong>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field>
+                    <input type="text" placeholder="Estado" aria-label="Number"
+                      matInput [formControl]="myControl" [matAutocomplete]="auto"
+                      name="estado" [(ngModel)]="studentAtentionJSON.Estado">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="myControl.hasError('required')">
+                      El Estado es<strong> requerido </strong>
+                    </mat-error>
+                  </mat-form-field>
+
+
+                    <mat-action-row>
+                          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                          <button mat-button color="primary" (click)="nextStep()">Next</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+                <mat-divider></mat-divider>
+                <!-- Confirm the attention for student -->
+                <mat-expansion-panel [expanded]="step ===2" (opened)="setStep(2)" hideToggle="true">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Confirmación de atención
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Confirmar y Guardar el Servicio Brindado
+                      <mat-icon color = "primary">exit_to_app</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <mat-slide-toggle color = "primary" name="confirmacion" [(ngModel)]="studentAtentionJSON.isDone">
+                    Porfavor Confirme!
+                  </mat-slide-toggle>
+
+                  <form>
+                    <mat-action-row>
+                      <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                      <button mat-button color="primary" (click)="addAtention()" >End</button>
+                    </mat-action-row>
+                  </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<app-tabla-estudiantes></app-tabla-estudiantes>
+

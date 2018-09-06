@@ -1,0 +1,55 @@
+<div class="example-container mat-elevation-z8">
+  <div class="example-header">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource">
+
+    <!-- Nombre Column -->
+
+    <ng-container matColumnDef="Nombre">
+      <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Nombre}} </mat-cell>
+    </ng-container> 
+
+    <!-- Apellido Column -->
+
+    <ng-container matColumnDef="Apellido">
+      <mat-header-cell *matHeaderCellDef> Apellido </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Apellido}} </mat-cell>
+    </ng-container>
+
+    <!-- Correo Column -->
+
+    <ng-container matColumnDef="Correo">
+      <mat-header-cell *matHeaderCellDef> Correo </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Correo}} </mat-cell>
+    </ng-container>
+
+    <!-- Fecha Column -->
+
+    <ng-container matColumnDef="Fecha">
+      <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Fecha}} </mat-cell>
+    </ng-container>
+
+    <!-- Servicio Column -->
+
+    <ng-container matColumnDef="Servicio">
+      <mat-header-cell *matHeaderCellDef> Servicio </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Servicio}} </mat-cell>
+    </ng-container>
+
+    <!-- Estado Column -->
+
+    <ng-container matColumnDef="Estado">
+      <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+      <mat-cell *matCellDef="let atentions"> {{atentions.Estado}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div> 

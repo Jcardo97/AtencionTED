@@ -1,0 +1,26 @@
+<div class="app-Estudiantes">
+    <div class = "alternative">
+    <mat-toolbar color="primary" class="example-toolbar">
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+        <h1>Tecnologías de Información</h1>
+      </mat-toolbar-row>
+    </mat-toolbar>
+<mat-sidenav-container class="example-sidenav-container"
+                         [style.marginTop.px]="mobileQuery.matches ? 0 : 0" mat-background color = "accent">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list id="sideNav">
+        <button mat-button routerLink="/dashboard"><mat-icon color = "primary">home</mat-icon> Home</button> <br>
+        <button mat-button routerLink="/estudiantes"><mat-icon color = "primary">face</mat-icon> Estudiantes</button> <br>
+        <button mat-button routerLink="/mantenimientos"><mat-icon color = "primary">assignment</mat-icon> Mantenimientos</button>
+        <button mat-button routerLink="/reportes"><mat-icon color = "primary">report</mat-icon> Reportes</button>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>        
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+  </mat-sidenav-container>
+  </div>
+</div>

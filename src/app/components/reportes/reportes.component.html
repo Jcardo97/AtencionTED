@@ -1,0 +1,177 @@
+    <!-- Nav Component -->
+
+    <!-- Table Componente -->
+    
+    <div class="example-container mat-elevation-z8"> 
+       
+          <!-- Inputs -->
+          <section>
+            <div class="input-group">
+                <mat-accordion class="informationCapture">
+    
+                  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+                    <!-- Capture student informatión  -->
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Datos Personales
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          Escriba los Datos Personales
+                          <mat-icon color = "primary">account_circle</mat-icon>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+    
+                      <mat-form-field>
+                          <input matInput placeholder="Nombre" name="nombre" [(ngModel)]="objBuscarJSON.Nombre"
+                          [formControl]="nombreFormControl" [errorStateMatcher]="errorMatcher">
+                      </mat-form-field>
+                      <mat-form-field>
+                          <input matInput placeholder="Apellido" name="apellido" [(ngModel)]="objBuscarJSON.Apellido"
+                          [formControl]="apellidoFormControl" [errorStateMatcher]="errorMatcher">
+
+                      </mat-form-field>
+                      <mat-form-field>
+                          <input matInput placeholder="Correo" name="correo" [(ngModel)]="objBuscarJSON.Correo" type = "Email"
+                          [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+    
+                          <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                            Por favor ingrese un <strong>Correo Valido</strong> 
+                          </mat-error>
+    
+                      </mat-form-field>
+    
+                      <mat-action-row>
+                          <button mat-button color="primary" (click)="nextStep()">Next</button>
+                      </mat-action-row>
+    
+                    </mat-expansion-panel>
+    
+                    <mat-divider></mat-divider>
+                    <!-- Capture Service Information  -->
+                    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
+    
+                      <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            Servicios
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Detalle el Servicio Brindado
+                            <mat-icon color = "primary">get_app</mat-icon>
+                          </mat-panel-description>
+                      </mat-expansion-panel-header>
+    
+                      <mat-form-field>
+                          <input matInput placeholder="Date" [matDatepicker]="picker1" (focus)="picker1.open()" readonly
+                          name="fecha1" [(ngModel)]="dateJSON.Date1"
+                          [formControl]="dateFormControl1" [errorStateMatcher]="errorMatcher1">
+    
+                      </mat-form-field>
+                      <mat-datepicker touchUi="true" #picker1></mat-datepicker>
+                      
+                      <mat-form-field>
+                        <input matInput placeholder="Date" [matDatepicker]="picker2" (focus)="picker2.open()" readonly
+                        name="fecha2" [(ngModel)]="dateJSON.Date2"
+                        [formControl]="dateFormControl1" [errorStateMatcher]="errorMatcher2">
+  
+                        
+                    </mat-form-field>
+                    <mat-datepicker touchUi="true" #picker2></mat-datepicker>
+
+                      <mat-form-field>
+                        <input type="text" placeholder="Servicio"
+                          matInput [formControl]="serviceControl"  
+                          name="servicio"  [errorStateMatcher]="errorMatcher">
+                      <!--
+                        --pertencen a la etiqueta input
+                        [matAutocomplete] = "service"
+                        [(ngModel)]="objBuscarJSON.Servicio"
+                        --
+                        <mat-autocomplete #service= "matAutocomplete">
+                          <mat-option *ngFor="let service of filteredService | async" [value] = "service">
+                              {{ service }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      -->
+                        </mat-form-field> 
+                      <mat-form-field>
+                        <input type="text" placeholder="Estado" aria-label="Number"
+                          matInput [formControl]="myControl"  
+                          name="estado" >
+                        <!--
+                          --pertenecen a la etiqueta input
+                            [matAutocomplete]="auto"
+                            [(ngModel)]="objBuscarJSON.Estado"
+                          --
+                          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{ option }}
+                            </mat-option>
+                          </mat-autocomplete>
+                        -->  
+                      </mat-form-field>
+    
+    
+                        <mat-action-row>
+                              <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                              <button mat-button color="primary" (click)="getServiceDate()">Buscar</button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+    
+                    <mat-divider></mat-divider>
+                  </mat-accordion>
+            </div>
+          </section>
+
+        <mat-table #table [dataSource]="dataSource" id = "tableToExport">
+      
+          <!-- Nombre Column -->
+      
+          <ng-container matColumnDef="Nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Nombre}} </mat-cell>
+          </ng-container> 
+      
+          <!-- Apellido Column -->
+      
+          <ng-container matColumnDef="Apellido">
+            <mat-header-cell *matHeaderCellDef> Apellido </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Apellido}} </mat-cell>
+          </ng-container>
+      
+          <!-- Correo Column -->
+      
+          <ng-container matColumnDef="Correo">
+            <mat-header-cell *matHeaderCellDef> Correo </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Correo}} </mat-cell>
+          </ng-container>
+      
+          <!-- Fecha Column -->
+      
+          <ng-container matColumnDef="Fecha">
+            <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Fecha}} </mat-cell>
+          </ng-container>
+      
+          <!-- Servicio Column -->
+      
+          <ng-container matColumnDef="Servicio">
+            <mat-header-cell *matHeaderCellDef> Servicio </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Servicio}} </mat-cell>
+          </ng-container>
+      
+          <!-- Estado Column -->
+      
+          <ng-container matColumnDef="Estado">
+            <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let atentions"> {{atentions.Estado}} </mat-cell>
+          </ng-container>
+      
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <button mat-button (click)="export()">Export</button>
+    </div> 
+
+    
+      
