@@ -1,0 +1,2 @@
+mongoexport --db appEstudiantes-db --collection studentServices --out atencionEstudiantes.json
+

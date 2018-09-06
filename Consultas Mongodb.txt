@@ -1,0 +1,34 @@
+Consulta de fechas: db.studentServices.find({ "Fecha" : {$gte : "aaaa-mm-dd", $lte : "aaaa-mm-dd"}})
+
+db.studentServices.find({}).pretty()
+
+db.studentServices.find({
+    Nombre:{ $type : 2},
+    Apellido:{ $type : 2},
+    Correo:{ $type : 2},
+    Fecha:{$type : 16},
+    Servicio:{ $type : 2},
+    Estado:{ $type : 2}
+}).pretty()
+
+db.studentServices.find({
+    Nombre:{ $type : 2},
+    Apellido:{ $type : 2},
+    Correo:{ $type : 2},
+    Fecha: { $gte: {$type: 16}, $lte: {$type: 16} },
+    Servicio:{ $type : 2},
+    Estado:{ $type : 2}
+}).pretty()
+
+db.studentServices.find({
+    Nombre:{ $type : 2},
+    Apellido:{ $type : 2},
+    Correo:{ $type : 2},
+    Fecha: { $gte: 1514786400, $lte: 1535090400 },
+    Servicio:{ $type : 2},
+    Estado:{ $type : 2}
+}).pretty()
+
+1522908000
+
+db.studentServices.find({}).pretty()
