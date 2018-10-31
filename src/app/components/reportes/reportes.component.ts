@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Observable}from 'rxjs/Observable';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {startWith} from 'rxjs/operators/startWith';
-import {map} from 'rxjs/operators/map';
+import {FormControl, Validators} from '@angular/forms';
 
+import {MatSnackBar} from '@angular/material';
 
 import { StudentAtentionService } from "../../service/student-atention.service";
 import { StudentService } from "../../class/studentService";
@@ -21,6 +20,11 @@ import * as XLSX from 'xlsx';
 export class ReportesComponent implements OnInit {
 
   //Variables
+  //
+  //Object to export xlsx
+  //
+  workBook;
+
   //
   //Object to keep the information for consult
   //
@@ -59,7 +63,7 @@ export class ReportesComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   filteredService: Observable<string[]>;
 
-//
+  //
   //definition of controllers
   //
   myControl = new FormControl('', [
@@ -86,23 +90,22 @@ export class ReportesComponent implements OnInit {
   ]);
 
   //
-  //mathcher from errors
+  //Table definitions
   //
-
-  //DB Charge Varaibles
   atentions: StudentService[];
   displayedColumns = ['Nombre', 'Apellido', 'Correo', 'Fecha', 'Servicio', 'Estado'];
   dataSource = new MatTableDataSource();
   
-
+  //
   //filter metod
+  //
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
   }
 
-  constructor(public studentAtentionService: StudentAtentionService) { }
+  constructor(public studentAtentionService: StudentAtentionService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
@@ -133,88 +136,40 @@ export class ReportesComponent implements OnInit {
     this.step--;
   }
 
-  //DB charge Method
-  getService(): void{
-    
-  }
-
-  
+  //
+  //Method to make a consult
+  //
   getServiceDate() {
-    
-   // console.log(this.dateJSON.Date1)
-    this.objBuscarJSON.Fecha1 = this.toEpochDate(this.dateJSON.Date1);
-    this.objBuscarJSON.Fecha2 = this.toEpochDate(this.dateJSON.Date2);
-
-    //Generación del objeto de busqueda
-    this.objBuscarJSON = this.queryConstruction(this.objBuscarJSON)
-    //console.log(this.objBuscarJSON);
-
-    this.studentAtentionService.getServiceDate(this.objBuscarJSON.Nombre, this.objBuscarJSON.Apellido, this.objBuscarJSON.Correo, this.objBuscarJSON.Fecha1, this.objBuscarJSON.Fecha2, this.objBuscarJSON.Servicio, this.objBuscarJSON.Estado)
-      .subscribe(atention => {
-        console.log(atention);
-
-        
-        this.atentions = this.toHumanDate(atention);
-        this.dataSource = new MatTableDataSource(this.atentions);
-        this.clean();
-    });
-    
+    //if(this.dateJSON.Date1 > this.dateJSON.Date2){
+		this.objBuscarJSON.Fecha1 = this.toEpochDate(this.dateJSON.Date1);
+		this.objBuscarJSON.Fecha2 = this.toEpochDate(this.dateJSON.Date2);
+        //Generate the query object
+		this.objBuscarJSON = this.queryConstruction(this.objBuscarJSON)
+		//Send the consult
+			this.studentAtentionService.getServiceDate(this.objBuscarJSON.Nombre, this.objBuscarJSON.Apellido, this.objBuscarJSON.Correo, this.objBuscarJSON.Fecha1, this.objBuscarJSON.Fecha2, this.objBuscarJSON.Servicio, this.objBuscarJSON.Estado)
+			.subscribe(atention => {
+			this.atentions = this.toHumanDate(atention);
+			this.workBook = atention; //assign object return from database to global variable
+			this.dataSource = new MatTableDataSource(this.atentions);
+			this.clean();
+			})
+	  //}
   }
+      //this.openSnackBar("Debe completar por lo menos un campo", "Aceptar");
  
-  /*
-  //Metodo generar Excel
-  // export Variables
-  data: AOA = [ [], [] ];
-  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
-  fileName: string = 'Reporte.xlsx';
-  jsonObject;
-*/
+  //
+  //Method to export the Workbook
+  //
+  exportWB() {
+    xlsxExport(this.workBook);
+  }
 
-  //Read Method
-  /*
-	onFileChange(evt: any) {
-		// wire up file reader 
-		const target: DataTransfer = <DataTransfer>(evt.target);
-		if (target.files.length !== 1) throw new Error('Cannot use multiple files');
-		const reader: FileReader = new FileReader();
-		reader.onload = (e: any) => {
-			// read workbook 
-			const bstr: string = e.target.result;
-			const wb: XLSX.WorkBook = XLSX.read(bstr, {type: 'binary'});
-
-			// grab first sheet 
-			const wsname: string = wb.SheetNames[0];
-			const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-			// save data 
-			this.data = <AOA>(XLSX.utils.sheet_to_json(ws, {header: 1}));
-		};
-		reader.readAsBinaryString(target.files[0]);
-	}
-  */
-
-  // Export method
-	//export(): void {
-		/* generate worksheet */
-		//const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet();
-
-    /* metodo B
-    var htmlstr = document.getElementById('tableToExport');
-    const ws: XLSX.WorkSheet = XLSX.read(htmlstr, {type:'binary'});
-    */
-
-    /* generate workbook and add the worksheet */
-	//	const wb: XLSX.WorkBook = XLSX.utils.book_new();
-   //XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    //var table_dom_elt = document.getElementById('tableToImport');
-    //var wb:XLSX.WorkBook = XLSX.utils.table_to_book(table_dom_elt);
-   /* save to file */
-		//XLSX.writeFile(wb, "export.xlsx");
-	//}
+  // 
+  /* Other Methods */
+  //
 
   //
-  //Epoch date Format
+  //Epoch date format
   //  
   toEpochDate(pDate): number {
     var myDate = new Date(pDate); // Your timezone!
@@ -222,6 +177,9 @@ export class ReportesComponent implements OnInit {
     return myEpoch;
   }
 
+  //
+  //Human date format
+  //
   toHumanDate(pDbJSON): StudentService[]{
     var result: StudentService[];
     var aux: StudentService[] = pDbJSON;
@@ -233,7 +191,7 @@ export class ReportesComponent implements OnInit {
   }
   
   //
-  //Create Object
+  //Definition the object for query
   //
   queryConstruction(objConsulta){
     if(objConsulta.Nombre == ''){
@@ -273,6 +231,52 @@ export class ReportesComponent implements OnInit {
     this.objBuscarJSON.Servicio = '';
     this.objBuscarJSON.Estado = '';
   }
+  
+  //
+  //method to comprobe the user complete all the spaces
+  //
+  validating(): boolean{
+    if(this.objBuscarJSON.Nombre == ""){
+      if(this.objBuscarJSON.Apellido == ""){
+        if(this.objBuscarJSON.Correo == ""){
+          if(this.objBuscarJSON.Fecha1 == null){
+            if(this.objBuscarJSON.Fecha2 == null){
+              if(this.objBuscarJSON.Servicio == ""){
+                if(this.objBuscarJSON.Estado == ""){
+                  return false;
+                }
+              }
+            }  
+          }
+        }
+      }
+    }else {
+      return true;
+    }
+  }
+
+  //
+  //Method to call a snackBar
+  //
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 3000,
+    });
+  }
 }
 
+  //
+  //Method to save information to excel
+  //
+  function xlsxExport(atention){
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(atention);
 
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, 'Report.xlsx');
+  }
+
+  

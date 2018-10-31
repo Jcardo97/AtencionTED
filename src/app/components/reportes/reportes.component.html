@@ -82,15 +82,16 @@
                           matInput [formControl]="serviceControl"  
                           name="servicio"  [errorStateMatcher]="errorMatcher">
                       <!--
-                        --pertencen a la etiqueta input
-                        [matAutocomplete] = "service"
-                        [(ngModel)]="objBuscarJSON.Servicio"
                         --
-                        <mat-autocomplete #service= "matAutocomplete">
-                          <mat-option *ngFor="let service of filteredService | async" [value] = "service">
-                              {{ service }}
-                          </mat-option>
-                        </mat-autocomplete>
+                          pertencen a la etiqueta input
+                          [matAutocomplete] = "service"
+                          [(ngModel)]="objBuscarJSON.Servicio"
+                        --
+                          <mat-autocomplete #service= "matAutocomplete">
+                            <mat-option *ngFor="let service of filteredService | async" [value] = "service">
+                                {{ service }}
+                            </mat-option>
+                          </mat-autocomplete>
                       -->
                         </mat-form-field> 
                       <mat-form-field>
@@ -98,7 +99,8 @@
                           matInput [formControl]="myControl"  
                           name="estado" >
                         <!--
-                          --pertenecen a la etiqueta input
+                          --
+                            pertenecen a la etiqueta input
                             [matAutocomplete]="auto"
                             [(ngModel)]="objBuscarJSON.Estado"
                           --
@@ -170,8 +172,9 @@
           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
 
-        <button mat-button (click)="export()">Export</button>
     </div> 
-
+    <div>
+      <button mat-button (click)="exportWB()">Export</button>
+    </div>
     
       

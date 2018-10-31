@@ -1,16 +1,10 @@
-import { Component, OnInit, state } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
-import { Http } from "@angular/http";
-import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
 import {  ErrorStateMatcher } from '@angular/material/core';
-import {  MatTableDataSource  } from '@angular/material';
-
-
-import { StudentService } from "../../class/studentService";
+import {MatSnackBar} from '@angular/material';
 import { StudentAtentionService } from "../../service/student-atention.service";
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -36,7 +30,6 @@ export class EstudiantesComponent implements OnInit {
     //
     //definition of variables
     //
-
     fecha;
     message1: string = "Debe confirmar el formulario";
     message2: string = "Existen Campos Vacios";
@@ -50,6 +43,7 @@ export class EstudiantesComponent implements OnInit {
       Estado: '',
       isDone: false
     }
+
     //
     //array with options for inputbox
     //
@@ -102,7 +96,7 @@ export class EstudiantesComponent implements OnInit {
     //
     //Aplication Constructor
     //
-    constructor(public studentAtentionService: StudentAtentionService) {
+    constructor(public studentAtentionService: StudentAtentionService, public snackBar: MatSnackBar) {
 
      }
 
@@ -166,10 +160,10 @@ export class EstudiantesComponent implements OnInit {
               this.clean();
             });
           }else {
-            alert(this.message1);
+            this.openSnackBar(this.message1, "Aceptar");
           }
       }else {
-        alert(this.message2);
+        this.openSnackBar(this.message2, "Aceptar");
       }
 
     };
@@ -194,7 +188,10 @@ export class EstudiantesComponent implements OnInit {
         return false;
       }
     }
-
+    
+    //
+    //Method to transform in epoch date
+    //
     epochDate(pFecha: Date): number {
       var result: number; //variable a retornar
       var myDate = new Date(pFecha); // Your timezone!
@@ -202,6 +199,9 @@ export class EstudiantesComponent implements OnInit {
       return result = myEpoch; // return epoch date
     }
 
+    //
+    //Method to clean fields
+    //
     clean() {
         this.studentAtentionJSON.Nombre = '';
         this.studentAtentionJSON.Apellido = '';
@@ -211,5 +211,14 @@ export class EstudiantesComponent implements OnInit {
         this.studentAtentionJSON.Estado = '';
         this.studentAtentionJSON.isDone = false;
         this.fecha = null;
+    }
+
+    //
+    //Method to call a snackBar
+    //
+    openSnackBar(message: string, action: string) {
+      this.snackBar.open(message, action, {
+        duration: 3000,
+      });
     }
 }
