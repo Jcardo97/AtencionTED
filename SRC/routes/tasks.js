@@ -47,14 +47,13 @@ router.get('/tasks/:_pNombre/:_pApellido/:_pCorreo/:_pFecha1/:_pFecha2/:_pServic
     
     MongoClient.connect(url, function(err, client) {
         assert.equal(null, err);
-        console.log("Connected correctly to server");
         //Variable for result the object
         var result;
         //Definition database
         const db = client.db(dbName);
         //Query Selection
         var queryConsulta = querySelection(objConsulta.Nombre, objConsulta.Apellido, objConsulta.Correo, objConsulta.Fecha1, objConsulta.Fecha2, objConsulta.Servicio,objConsulta.Estado);
-        console.log(queryConsulta);
+        console.log("esta es la consulta que se está enviando:" + queryConsulta);
         //interaction with database 
         db.collection(dbCollection).find(queryConsulta).toArray(function(err, docs) {
             if (err) throw err;
@@ -65,7 +64,9 @@ router.get('/tasks/:_pNombre/:_pApellido/:_pCorreo/:_pFecha1/:_pFecha2/:_pServic
     });
 });
 
-//metodo para guardar
+//
+//Method to save information
+//
 router.post('/tasks', (req, res, next) => {
     const studentService = req.body;
     MongoClient.connect(url, function(err, client) {
@@ -99,63 +100,82 @@ router.post('/tasks', (req, res, next) => {
 //
 //Method to validate date.
 //
-    function querySelection(pNombre, pApellido, pCorreo, pFecha1, pFecha2, pServicio, pEstado){
+function querySelection(pNombre, pApellido, pCorreo, pFecha1, pFecha2, pServicio, pEstado){
 
-        //Constants
-        var Query;
-
-        if(pFecha1 == 0 || pFecha2 == 0){
-            if(pNombre == 'a'){
-                pNombre = {$type:2};
-              }
-              if(pApellido == 'a'){
-                pApellido = {$type:2};
-              }      
-              if(pCorreo == 'a'){
-                pCorreo = {$type:2};
-              }     
-              if(pServicio == 'a'){
-                pServicio = {$type:2};
-              }                    
-              if(pEstado == 'a'){
-                pEstado = {$type:2};  
-              }    
-            Query = {
-                Nombre: pNombre,
-                Apellido: pApellido,
-                Correo: pCorreo,                
-                Servicio: pServicio,
-                Estado: pEstado
-            };
-        } else {
-            if(pNombre == 'a'){
-                pNombre = {$type:2};
-              }
-              if(pApellido == 'a'){
-                pApellido = {$type:2};
-              }      
-              if(pCorreo == 'a'){
-                pCorreo = {$type:2};
-              }     
-              if(pServicio == 'a'){
-                pServicio = {$type:2};
-              }                    
-              if(pEstado == 'a'){
-                pEstado = {$type:2};  
-              } 
-              
+    //Constants
+    var Query;
+    if(pFecha1 == 0 && pFecha2 == 0){
+        if(pNombre == 'a'){
+            pNombre = {$type:2};
+          }
+          if(pApellido == 'a'){
+            pApellido = {$type:2};
+          }      
+          if(pCorreo == 'a'){
+            pCorreo = {$type:2};
+          }     
+          if(pServicio == 'a'){
+            pServicio = {$type:2};
+          }                    
+          if(pEstado == 'a'){
+            pEstado = {$type:2};  
+          }    
+          Query = {
+            Nombre: pNombre,
+            Apellido: pApellido,
+            Correo: pCorreo,                
+            Servicio: pServicio,
+            Estado: pEstado
+          };
+    } else {
+        if(pNombre == 'a'){
+            pNombre = {$type:2};
+          }
+          if(pApellido == 'a'){
+            pApellido = {$type:2};
+          }      
+          if(pCorreo == 'a'){
+            pCorreo = {$type:2};
+          }     
+          if(pServicio == 'a'){
+            pServicio = {$type:2};
+          }                    
+          if(pEstado == 'a'){
+            pEstado = {$type:2};  
+          }
+          console.log("Esta es la fecha2: " + pFecha2); 
+          if (pFecha2 == 0){
             Query = {
                 Nombre: pNombre,
                 Apellido: pApellido,
                 Correo: pCorreo,
-                Fecha: { $gte: parseInt(pFecha1), $lte: parseInt(pFecha2) },                
+                Fecha: { $gte: parseInt(pFecha1)},                
                 Servicio: pServicio,
                 Estado: pEstado
             };
-        }
-        
-        return Query;
+            Console.log(Query);  
+          } else if (pFecha1 == 0){
+              Query = {
+                Nombre: pNombre,
+                Apellido: pApellido,
+                Correo: pCorreo,
+                Fecha: { $lte: parseInt(pFecha2) },                
+                Servicio: pServicio,
+                Estado: pEstado
+              };
+          }
+          Query = {
+            Nombre: pNombre,
+            Apellido: pApellido,
+            Correo: pCorreo,
+            Fecha: { $gte: parseInt(pFecha1), $lte: parseInt(pFecha2) },                
+            Servicio: pServicio,
+            Estado: pEstado
+          };
     }
+    
+    return Query;
+}
 
 ////////methods
 
