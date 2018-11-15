@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const mongo = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 // Collection Name
@@ -18,14 +19,12 @@ const url = 'mongodb://localhost:27017';
 
         MongoClient.connect(url, function(err, client) {
             assert.equal(null, err);
-            console.log("Connected correctly to server");
             
             var result; 
 
             const db = client.db(dbName);
             db.collection(dbCollection).find({}).toArray(function(err, docs) {
-                if (err) throw err;
-                
+                if (err) throw err;                
                 result = JSON.stringify(docs);
                 //console.log(result);
                 res.send(result);
@@ -37,6 +36,7 @@ const url = 'mongodb://localhost:27017';
     //
     // QUery para hacer consultas "dinamicas"
     //
+
     router.get('/tasks/:_pNombre/:_pApellido/:_pCorreo/:_pFecha1/:_pFecha2/:_pServicio/:_pEstado', (req, res, next) => {
 
         //
@@ -77,18 +77,17 @@ const url = 'mongodb://localhost:27017';
     //
     //Method to save information
     //
+
     router.post('/tasks', (req, res, next) => {
         const studentService = req.body;
         MongoClient.connect(url, function(err, client) {
             assert.equal(null, err);
-            console.log("Connected correctly to server");
             
             var result;
 
             const db = client.db(dbName);
             db.collection(dbCollection).insertOne(studentService, function(err, docs) {
                 if (err) throw err;
-                console.log("1 document inserted");
                 result = JSON.stringify(docs)
                 res.send(docs);
                 client.close();
@@ -96,15 +95,27 @@ const url = 'mongodb://localhost:27017';
         });
     });
 
+    //
     // metodo para eliminar datos
+    //
     router.delete('/tasks/:id', (req, res, next) => {
-        
+        MongoClient.connect(url, function(err, client) {
+            assert.equal(null, err);
+            const db = client.db(dbName);
+            var myquery = { _id: new mongo.ObjectId(req.params.id) };
+            db.collection(dbCollection).deleteOne(myquery, function(err, obj) {
+                if (err) throw err;
+                    res.send(obj);
+            });
+            client.close();
+        });  
     });
 
+    //
     // metodo para actualizar datos
+    //
     router.put('/task/:id', (req, res, next) => {
         
-
     });
 
     //
@@ -112,9 +123,7 @@ const url = 'mongodb://localhost:27017';
     //
     function querySelection(pNombre, pApellido, pCorreo, pFecha1, pFecha2, pServicio, pEstado){
 
-        //
         //Constants
-        //
         objConsulta = {
             Nombre: pNombre,
             Apellido: pApellido,
@@ -126,9 +135,7 @@ const url = 'mongodb://localhost:27017';
         }
         var Query;
 
-        //
         //Funtions
-        //
         if(pFecha1 == 0 && pFecha2 == 0){
             Query = queryWithoutDate(objConsulta); // Generate query without dates
         } else {
@@ -141,7 +148,9 @@ const url = 'mongodb://localhost:27017';
 
     ////////methods
 
+    //
     //InsertMany
+    //
     const insertDocuments = function(db, item, callback) {
         // Call the collection
         const collection = db.collection('documents');
@@ -152,13 +161,12 @@ const url = 'mongodb://localhost:27017';
             assert.equal(null, err);
             assert.equal(3, result.result.n);
             assert.equal(3, result.ops.length);
-            console.log("Inserted 1 documents into the collection");
             callback(result);
         });
     }
 
     //
-    //Methods to create Query
+    //Methods to Generate Query
     //
 
     //
