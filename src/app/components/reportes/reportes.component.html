@@ -72,51 +72,45 @@
                         <input matInput placeholder="Date" [matDatepicker]="picker2" (focus)="picker2.open()" readonly
                         name="fecha2" [(ngModel)]="dateJSON.Date2"
                         [formControl]="dateFormControl1" [errorStateMatcher]="errorMatcher2">
-  
-                        
-                    </mat-form-field>
-                    <mat-datepicker touchUi="true" #picker2></mat-datepicker>
+                      </mat-form-field>
+                      <mat-datepicker touchUi="true" #picker2></mat-datepicker>
 
+                      <mat-form-field>
+                        <mat-select placeholder="Servicio" name="servicio" [(ngModel)]="objBuscarJSON.Servicio">
+                          <mat-option *ngFor="let service of services" [value]="service.value">
+                            {{service.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <!--
                       <mat-form-field>
                         <input type="text" placeholder="Servicio"
                           matInput [formControl]="serviceControl"  
-                          name="servicio"  [errorStateMatcher]="errorMatcher">
-                      <!--
-                        --
-                          pertencen a la etiqueta input
-                          [matAutocomplete] = "service"
-                          [(ngModel)]="objBuscarJSON.Servicio"
-                        --
-                          <mat-autocomplete #service= "matAutocomplete">
-                            <mat-option *ngFor="let service of filteredService | async" [value] = "service">
-                                {{ service }}
-                            </mat-option>
-                          </mat-autocomplete>
+                          name="servicio"  [errorStateMatcher]="errorMatcher" 
+                          [matAutocomplete] = "autoService" [(ngModel)]="objBuscarJSON.Servicio">
+
+                        <mat-autocomplete #autoService= "matAutocomplete">
+                          <mat-option *ngFor="let service of filteredService | async" [value] = "service">
+                              {{ service }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field> 
                       -->
-                        </mat-form-field> 
                       <mat-form-field>
-                        <input type="text" placeholder="Estado" aria-label="Number"
-                          matInput [formControl]="myControl"  
-                          name="estado" >
-                        <!--
-                          --
-                            pertenecen a la etiqueta input
-                            [matAutocomplete]="auto"
-                            [(ngModel)]="objBuscarJSON.Estado"
-                          --
-                          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                {{ option }}
-                            </mat-option>
-                          </mat-autocomplete>
-                        -->  
+                        <mat-select placeholder="Estado" name="estado" [(ngModel)]="objBuscarJSON.Estado">
+                          <mat-option *ngFor="let option of options" [value]="option.value">
+                            {{option.viewValue}}
+                          </mat-option>
+                        </mat-select>
                       </mat-form-field>
-    
-    
-                        <mat-action-row>
-                              <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                              <button mat-button color="primary" (click)="getServiceDate()">Buscar</button>
-                        </mat-action-row>
+
+                      
+
+                      <mat-action-row>
+                        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                        <button mat-button color="primary" (click)="getServiceDate()">Buscar</button>
+                      </mat-action-row>
                     </mat-expansion-panel>
     
                     <mat-divider></mat-divider>

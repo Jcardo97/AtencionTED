@@ -21,35 +21,40 @@
                       <mat-icon color = "primary">account_circle</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
+                  <!-- Cédula -->
+                  <mat-form-field>
+                    <input matInput placeholder="Cédula" name="cedula" [(ngModel)]="studentAtentionJSON.Cedula"
+                    [formControl]="cedulaFormControl" [errorStateMatcher]="errorMatcher">
+                    <mat-error *ngIf="cedulaFormControl.hasError('required')">
+                      La Cédula es<strong> requerida </strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- Nombre -->
                   <mat-form-field>
                       <input matInput placeholder="Nombre" name="nombre" [(ngModel)]="studentAtentionJSON.Nombre"
                       [formControl]="nombreFormControl" [errorStateMatcher]="errorMatcher">
-
                       <mat-error *ngIf="nombreFormControl.hasError('required')">
                         El Nombre es<strong> requerido </strong>
                       </mat-error>
-
                   </mat-form-field>
+                  <!-- Apellido -->
                   <mat-form-field>
                       <input matInput placeholder="Apellido" name="apellido" [(ngModel)]="studentAtentionJSON.Apellido"
                       [formControl]="apellidoFormControl" [errorStateMatcher]="errorMatcher">
-
                       <mat-error *ngIf="apellidoFormControl.hasError('required')">
                         El Apellido es<strong> requerido </strong>
                       </mat-error>
                   </mat-form-field>
+                  <!-- Correo -->
                   <mat-form-field>
                       <input matInput placeholder="Correo" name="correo" [(ngModel)]="studentAtentionJSON.Correo" type = "Email"
                       [formControl]="emailFormControl" [errorStateMatcher]="matcher">
-
                       <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                         Por favor ingrese un <strong>Correo Valido</strong> 
                       </mat-error>
                       <mat-error *ngIf="emailFormControl.hasError('required')">
                         Correo es <strong>requerido</strong>
                       </mat-error>
-
                   </mat-form-field>
 
                   <mat-action-row>
@@ -61,28 +66,27 @@
                 <mat-divider></mat-divider>
                 <!-- Capture Service Information  -->
                 <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle="true">
-
+                  
                   <mat-expansion-panel-header>
                       <mat-panel-title>
                         Servicios
                       </mat-panel-title>
                       <mat-panel-description>
-                        Detalle el Servicio Brindado
+                        Información del Servicio Brindado
                         <mat-icon color = "primary">get_app</mat-icon>
                       </mat-panel-description>
                   </mat-expansion-panel-header>
-
+                  <!-- Fecha -->
                   <mat-form-field>
                       <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly
                       name="fecha" [(ngModel)]="fecha"
                       [formControl]="dateFormControl" [errorStateMatcher]="errorMatcher">
-
                       <mat-error *ngIf="dateFormControl.hasError('required')">
                         La Fecha es<strong> requerida </strong>
                       </mat-error>
                   </mat-form-field>
                   <mat-datepicker touchUi="true" #picker></mat-datepicker>
-
+                  <!-- Servicio -->
                   <mat-form-field>
                     <input type="text" placeholder="Servicio"
                       matInput [formControl]="serviceControl" [matAutocomplete] = "service"
@@ -96,26 +100,40 @@
                       El Servicio es<strong> requerido </strong>
                     </mat-error>
                   </mat-form-field>
-
+                  <!-- Estado -->
                   <mat-form-field>
                     <input type="text" placeholder="Estado" aria-label="Number"
-                      matInput [formControl]="myControl" [matAutocomplete]="auto"
+                      matInput [formControl]="estadoControl" [matAutocomplete]="auto"
                       name="estado" [(ngModel)]="studentAtentionJSON.Estado">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
                         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                             {{ option }}
                         </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="myControl.hasError('required')">
+                    <mat-error *ngIf="estadoControl.hasError('required')">
                       El Estado es<strong> requerido </strong>
                     </mat-error>
                   </mat-form-field>
+                  <!-- Forma de Solicitud -->
+                  <mat-form-field>
+                    <input type="text" placeholder="Canal de atención" aria-label="Number"
+                      matInput [formControl]="metSolicitudControl" [matAutocomplete]="metSolicitud"
+                      name="metodoSolicitud" [(ngModel)]="studentAtentionJSON.MetodoSolicitud">
+                    <mat-autocomplete autoActiveFirstOption #metSolicitud="matAutocomplete">
+                        <mat-option *ngFor="let solicitud of filteredSolicitud | async" [value]="solicitud">
+                            {{ solicitud }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="myControl.hasError('required')">
+                      El tipo de solicitud es<strong> requerido </strong>
+                    </mat-error>
+                  </mat-form-field>
 
-
-                    <mat-action-row>
-                          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-                          <button mat-button color="primary" (click)="nextStep()">Next</button>
-                    </mat-action-row>
+                  <mat-action-row>
+                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                  </mat-action-row>
+                
                 </mat-expansion-panel>
 
                 <mat-divider></mat-divider>
@@ -123,17 +141,33 @@
                 <mat-expansion-panel [expanded]="step ===2" (opened)="setStep(2)" hideToggle="true">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      Confirmación de atención
+                      Detalles del Servicio
                     </mat-panel-title>
                     <mat-panel-description>
-                      Confirmar y Guardar el Servicio Brindado
+                      Detalles del sevicio brindado
                       <mat-icon color = "primary">exit_to_app</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
-                  <mat-slide-toggle color = "primary" name="confirmacion" [(ngModel)]="studentAtentionJSON.isDone">
-                    Porfavor Confirme!
-                  </mat-slide-toggle>
+                  <!-- Detalle -->
+                  <mat-form-field>
+                    <textarea matInput placeholder="Detalle" matTextareaAutosize matAutosizeMinRows="4"
+                              matAutosizeMaxRows="6"></textarea>
+                  </mat-form-field>
+                  <!-- Campus -->
+                  <mat-form-field>
+                    <input type="text" placeholder="Campus" aria-label="Number"
+                      matInput [formControl]="campusControl" [matAutocomplete]="campus"
+                      name="campus" [(ngModel)]="studentAtentionJSON.Campus">
+                    <mat-autocomplete autoActiveFirstOption #campus="matAutocomplete">
+                        <mat-option *ngFor="let sede of filteredSede | async" [value]="sede">
+                            {{ sede }}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="campusControl.hasError('required')">
+                      El campus es<strong> requerido </strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-slide-toggle color = "primary" name="confirmacion" [(ngModel)]="studentAtentionJSON.isDone"></mat-slide-toggle>
 
                   <form>
                     <mat-action-row>

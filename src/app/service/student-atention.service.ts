@@ -25,7 +25,6 @@ export class StudentAtentionService {
   }
 
   getServiceDate(_pNombre, _pApellido, _pCorreo, _pFecha1, _pFecha2, _pServicio, _pEstado){
-    console.log(_pNombre);
     return this.http.get<StudentService[]>(`${this.domain}/api/tasks/${_pNombre}/${_pApellido}/${_pCorreo}/${_pFecha1}/${_pFecha2}/${_pServicio}/${_pEstado}`,)
     .map(res => res);
   }

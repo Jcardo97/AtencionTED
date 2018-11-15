@@ -33,7 +33,7 @@ export class ReportesComponent implements OnInit {
     Date1: null,
     Date2: null
   }
-
+  
   step = 0;
   objBuscarJSON = {
     Nombre: '',
@@ -47,14 +47,19 @@ export class ReportesComponent implements OnInit {
   //
   //array with options for inputbox
   //
-  options = ['Resuelto', 'Sin Resolver', 'Atendido'];
+  
   services = [
-    'Cambio de Contraseña CV',
-    'Guia Campus Virtual',
-    'Otros Campus Virtual',
-    'Cambio de Contraseña SA',
-    'Usuario de Microsoft Imagine',
-    'Servicios MasterLex y VLex'
+    {value: 'Cambio de Contraseña CV', viewValue: 'Cambio de Contraseña CV'},
+    {value: 'Guia Campus Virtual', viewValue: 'Guia Campus Virtual'},
+    {value: 'Otros Campus Virtual', viewValue: 'Otros Campus Virtual'},
+    {value: 'Cambio de Contraseña SA', viewValue: 'Cambio de Contraseña SA'},
+    {value: 'Usuario de Microsoft Imagine', viewValue: 'Usuario de Microsoft Imagine'},
+    {value: 'Actividades Fide-learning', viewValue: 'Actividades Fide-learning'}
+  ];
+  options = [
+    {value: 'Resuelto', viewValue: 'Resuelto'},
+    {value: 'Sin Resolver', viewValue: 'Sin Resolver'},
+    {value: 'Atendido', viewValue: 'Atendido'}
   ];
 
   //
@@ -111,17 +116,6 @@ export class ReportesComponent implements OnInit {
   }
 
   //
-  //methods to return the observable
-  //
-  filter(val: string): string[] {
-    return this.options.filter(option => option.toLowerCase().indexOf(val.toLowerCase()) === 0);
-  }
-
-  filterService(valor: string): string[] {
-    return this.services.filter(service => service.toLowerCase().indexOf(valor.toLowerCase()) === 0);
-  }
-
-  //
   //methods to walk in the mat-accordeon
   //
   setStep(index: number) {
@@ -143,9 +137,11 @@ export class ReportesComponent implements OnInit {
     //if(this.dateJSON.Date1 > this.dateJSON.Date2){
 		this.objBuscarJSON.Fecha1 = this.toEpochDate(this.dateJSON.Date1);
 		this.objBuscarJSON.Fecha2 = this.toEpochDate(this.dateJSON.Date2);
-        //Generate the query object
-		this.objBuscarJSON = this.queryConstruction(this.objBuscarJSON)
-		//Send the consult
+    //Generate the query object
+		this.objBuscarJSON = this.queryConstruction(this.objBuscarJSON);
+    this.objBuscarJSON = this.upperCaseObject(this.objBuscarJSON);
+    console.log(this.objBuscarJSON);
+    //Send the consult
 			this.studentAtentionService.getServiceDate(this.objBuscarJSON.Nombre, this.objBuscarJSON.Apellido, this.objBuscarJSON.Correo, this.objBuscarJSON.Fecha1, this.objBuscarJSON.Fecha2, this.objBuscarJSON.Servicio, this.objBuscarJSON.Estado)
 			.subscribe(atention => {
 			this.atentions = this.toHumanDate(atention);
@@ -195,13 +191,13 @@ export class ReportesComponent implements OnInit {
   //
   queryConstruction(objConsulta){
     if(objConsulta.Nombre == ''){
-      objConsulta.Nombre = 'a';
+      objConsulta.Nombre = '&';
     }
     if(objConsulta.Apellido == ''){
-      objConsulta.Apellido = 'a';
+      objConsulta.Apellido = '&';
     }      
     if(objConsulta.Correo == ''){
-      objConsulta.Correo = 'a';
+      objConsulta.Correo = '&';
     }        
     if(objConsulta.Fecha1 == 0){
       objConsulta.Fecha1 = 0;
@@ -210,10 +206,10 @@ export class ReportesComponent implements OnInit {
       objConsulta.Fecha2 = 0;
     }  
     if(objConsulta.Servicio == ''){
-      objConsulta.Servicio = 'a';
+      objConsulta.Servicio = '&';
     }                    
     if(objConsulta.Estado == ''){
-      objConsulta.Estado = 'a';  
+      objConsulta.Estado = '&';  
     }    
   return objConsulta;
   }
@@ -263,6 +259,38 @@ export class ReportesComponent implements OnInit {
       duration: 3000,
     });
   }
+
+  upperCaseObject(objConsulta){
+    var objResultado = {
+      Nombre: '',
+      Apellido: '',
+      Correo: '',
+      Fecha1: 0,
+      Fecha2: 0,    
+      Servicio: '',
+      Estado: ''
+    };
+    objResultado.Nombre = objConsulta.Nombre.toUpperCase();
+    objResultado.Apellido = objConsulta.Apellido.toUpperCase();
+    objResultado.Correo = objConsulta.Correo.toUpperCase();
+    objResultado.Fecha1 = objConsulta.Fecha1;
+    objResultado.Fecha2 = objConsulta.Fecha2;
+    objResultado.Servicio = objConsulta.Servicio.toUpperCase();
+    objResultado.Estado = objConsulta.Estado.toUpperCase();
+
+    return objResultado;
+  }
+
+  /*
+  objBuscarJSON = {
+    Nombre: '',
+    Apellido: '',
+    Correo: '',
+    Fecha1: 0,
+    Fecha2: 0,    
+    Servicio: '',
+    Estado: ''
+  }*/
 }
 
   //
