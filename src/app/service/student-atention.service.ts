@@ -35,7 +35,7 @@ export class StudentAtentionService {
   }
 
   deleteService(id) {
-    return this.http.delete(`${this.domain}/api/tasks/${id}`)
+    return this.http.delete<StudentService>(`${this.domain}/api/tasks/${id}`)
      .map(res => res);
   }
 
@@ -43,6 +43,5 @@ export class StudentAtentionService {
     return this.http.put(`${this.domain}/api/tasks/${newStudentAtention.id}`, newStudentAtention)
       .map(res => res);
   }
-
 
 }

@@ -19,6 +19,7 @@ import { StudentAtentionService } from "./service/student-atention.service";
 import { TablaEstudiantesComponent } from './components/tabla-estudiantes/tabla-estudiantes.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { UnderContructionComponent } from './components/under-contruction/under-contruction.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { UnderContructionComponent } from './components/under-contruction/under-
     TablaEstudiantesComponent,
     ReportesComponent,
     UnderContructionComponent,
+    ConfirmationDialogComponent,
 
   ],
   imports: [
