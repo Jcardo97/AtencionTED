@@ -93,7 +93,7 @@ const url = 'mongodb://localhost:27017';
     router.post('/tasks', (req, res, next) => {
         const studentService = {
             CaseId: "",
-            User: req.body.userName,
+            User: req.body.User,
             Cedula: req.body.Cedula,
             Nombre: req.body.Nombre,
             Apellido: req.body.Apellido,
